@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <NoShipmentsAlert>
+            <version>0.1.0</version>
+        </NoShipmentsAlert>
+    </modules>
+
+    <phpunit>
+        <suite>
+            <modules>
+                <NoShipmentsAlert/>
+            </modules>
+        </suite>
+    </phpunit>
+
+    <adminhtml>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <NoShipmentsAlert>
+                            <title>Monitor Menu</title>
+                            <sort_order>10</sort_order>
+                        </NoShipmentsAlert>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <monitor_options translate="title" module="noshipmentsalert">
+                                            <title>No Shipments Alert</title>
+                                        </monitor_options>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+    <global>
+        <models>
+            <noshipmentsalert>
+                <class>NoShipmentsAlert_Model</class>
+            </noshipmentsalert>
+        </models>
+        <helpers>
+            <noshipmentsalert>
+                <class>NoShipmentsAlert_Helper</class>
+            </noshipmentsalert>
+        </helpers>
+        <template>
+            <email>
+                <monitor_options_noshipmentsalert_alert_template translate="label" module="noshipmentsalert">
+                    <label>No Shipments Alert Template</label>
+                    <file>monitor/noshipmentsalert.html</file>
+                    <type>text</type>
+                </monitor_options_noshipmentsalert_alert_template>
+            </email>
+        </template>
+        <events>
+            <monitor_send_before>
+                <observers>
+                    <noshipmentsalert_observer>
+                        <class>NoShipmentsAlert_Model_Observer</class>
+                        <method>check</method>
+                        <type>singleton</type>
+                    </noshipmentsalert_observer>
+                </observers>
+            </monitor_send_before>
+        </events>
+    </global>
+
+    <default>
+        <monitor_options>
+            <noshipmentsalert>
+                <enable>1</enable>
+                <alert_time>24</alert_time>
+            </noshipmentsalert>
+        </monitor_options>
+    </default>
+
+</config>

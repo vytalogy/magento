@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <NoOrdersAlert>
+            <version>0.1.0</version>
+        </NoOrdersAlert>
+    </modules>
+
+    <phpunit>
+        <suite>
+            <modules>
+                <NoOrdersAlert/>
+            </modules>
+        </suite>
+    </phpunit>
+
+    <adminhtml>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <NoOrdersAlert>
+                            <title>Monitor Menu</title>
+                            <sort_order>10</sort_order>
+                        </NoOrdersAlert>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <monitor_options translate="title" module="monitor">
+                                            <title>No Orders Alert</title>
+                                        </monitor_options>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+    <global>
+        <models>
+            <noordersalert>
+                <class>NoOrdersAlert_Model</class>
+            </noordersalert>
+        </models>
+        <helpers>
+            <noordersalert>
+                <class>NoOrdersAlert_Helper</class>
+            </noordersalert>
+        </helpers>
+        <template>
+            <email>
+                <monitor_options_noordersalert_alert_template translate="label" module="noordersalert">
+                    <label>No Orders Alert Template</label>
+                    <file>monitor/noordersalert.html</file>
+                    <type>text</type>
+                </monitor_options_noordersalert_alert_template>
+            </email>
+        </template>
+        <events>
+            <monitor_send_before>
+                <observers>
+                    <noordersalert_observer>
+                        <class>NoOrdersAlert_Model_Observer</class>
+                        <method>check</method>
+                        <type>singleton</type>
+                    </noordersalert_observer>
+                </observers>
+            </monitor_send_before>
+        </events>
+    </global>
+
+    <default>
+        <monitor_options>
+            <noordersalert>
+                <enable>1</enable>
+                <alert_time>24</alert_time>
+            </noordersalert>
+        </monitor_options>
+    </default>
+
+</config>
